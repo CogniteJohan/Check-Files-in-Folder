@@ -7,7 +7,8 @@ function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Sjekk mapper')
     .addItem('Kjør funksjon', 'main')
-    .addItem('Opprett tidsutløsere', 'TriggerCreation')
+    .addItem('Opprett tidsutløsere', 'TriggerCreationFromMenu')
+    .addItem('Slett tidsutløsere', 'DeleteIfTriggersExistsFromMenu')
     .addToUi();
 }
 
@@ -133,16 +134,6 @@ function FilterNewFiles(fileList, compareDate) {
 }
 
 
-function CreateTriggers() {
- ScriptApp.newTrigger("main")
-   .timeBased()
-   .atHour(5)
-   .everyDays(2)
-   .inTimezone("Europe/Oslo")
-   .create();
-}
-
-
 function DeleteIfTriggersExists(eventType, handlerFunction) {
   var triggers = ScriptApp.getProjectTriggers();
   triggers.forEach(function (trigger) {
@@ -152,6 +143,11 @@ function DeleteIfTriggersExists(eventType, handlerFunction) {
   });
 }
 
+
+function DeleteIfTriggersExistsFromMenu(){
+  DeleteIfTriggersExists(eventType="CLOCK", handlerFunction="main");
+  SpreadsheetApp.getUi().alert("Tidsutløsere har blitt slettet");
+}
 
 function TriggerCreation(){
   DeleteIfTriggersExists(eventType="CLOCK", handlerFunction="main");
@@ -169,4 +165,9 @@ function TriggerCreation(){
    .create();
 }
 
+
+function TriggerCreationFromMenu(){
+  TriggerCreation();
+  SpreadsheetApp.getUi().alert("Tidsutløsere har blitt opprettet");
+}
 
